@@ -46,6 +46,13 @@ const ALL_PRODUCTS = [
     category: "items",
     image: "/products/4.png",
   },
+  {
+    id: 5,
+    title: "Scottish Fold Mushuk",
+    price: "150,000",
+    category: "cats",
+    image: "/products/5.png",
+  }
 ]
 
 const Products = () => {
