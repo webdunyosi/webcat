@@ -1,5 +1,4 @@
 import { useState } from "react"
-// Kerakli iconlarni import qilamiz
 import {
   FaBorderAll,
   FaCat,
@@ -9,7 +8,7 @@ import {
 } from "react-icons/fa"
 import ProductCard from "../components/common/ProductCard"
 
-// Kategoriyalarni ID va Icon komponenti bilan belgilaymiz
+// 1. Kategoriyalar ro'yxati
 const CATEGORIES = [
   { id: "all", name: "Hammasi", icon: <FaBorderAll /> },
   { id: "cats", name: "Mushuklar", icon: <FaCat /> },
@@ -17,39 +16,40 @@ const CATEGORIES = [
   { id: "items", name: "Buyumlar", icon: <FaShoppingBasket /> },
 ]
 
+// 2. Mahsulotlar bazasi (Narxlar raqam ko'rinishida!)
 const ALL_PRODUCTS = [
   {
     id: 1,
     title: "Premium Mushuk Ovqati",
-    price: "45,000",
+    price: 45000, 
     category: "foods",
     image: "/products/1.png",
   },
   {
     id: 2,
     title: "Mushuk Konserva Ovqati",
-    price: "25,000",
+    price: 25000,
     category: "foods",
     image: "/products/2.png",
   },
   {
     id: 3,
     title: "Mushuk O'yinchoqlari",
-    price: "15,000",
+    price: 15000,
     category: "items",
     image: "/products/3.png",
   },
   {
     id: 4,
     title: "Mushuk Uyqu To'shagi",
-    price: "30,000",
+    price: 30000,
     category: "items",
     image: "/products/4.png",
   },
   {
     id: 5,
     title: "Scottish Fold Mushuk",
-    price: "150,000",
+    price: 150000,
     category: "cats",
     image: "/products/5.png",
   }
@@ -109,6 +109,8 @@ const Products = () => {
         {filteredProducts.map((product) => (
           <ProductCard key={product.id} {...product} />
         ))}
+        
+        {/* Agar mahsulot topilmasa */}
         {filteredProducts.length === 0 && (
           <div className="col-span-full text-center py-20 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
             <p className="text-gray-400 text-lg italic">
