@@ -1,5 +1,6 @@
 import { Routes, Route } from "react-router-dom"
 import { CartProvider } from "./context/CartContext"
+import { Toaster } from "react-hot-toast" // 1. Toaster import qilindi
 import MainLayout from "./layouts/MainLayout"
 import Products from "./pages/Products"
 import Orders from "./pages/Orders"
@@ -11,6 +12,20 @@ import Cart from "./pages/Cart"
 const App = () => {
   return (
     <CartProvider>
+      {/* 2. Bildirishnomalar ekranda chiqishi uchun Toaster qo'shildi */}
+      <Toaster 
+        position="top-center" 
+        reverseOrder={false} 
+        toastOptions={{
+          duration: 3000,
+          style: {
+            borderRadius: '16px',
+            background: '#333',
+            color: '#fff',
+          },
+        }}
+      />
+      
       <Routes>
         {/* Layout bilan chiquvchi sahifalar */}
         <Route element={<MainLayout />}>

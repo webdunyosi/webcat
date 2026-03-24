@@ -33,7 +33,8 @@ export const CartProvider = ({ children }) => {
     )
   }
 
-  // NaN xatosini oldini olish uchun raqamga aylantirib hisoblash
+  const clearCart = () => setCartItems([]) // Savatni tozalash
+
   const totalPrice = cartItems.reduce((acc, item) => {
     const price = Number(item.price) || 0
     return acc + price * item.quantity
@@ -47,6 +48,7 @@ export const CartProvider = ({ children }) => {
         removeFromCart,
         updateQuantity,
         totalPrice,
+        clearCart,
       }}
     >
       {children}
