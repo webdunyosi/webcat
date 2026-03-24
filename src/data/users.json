@@ -1,0 +1,18 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "admin",
+      "password": "123",
+      "fullName": "Dilnoza Rashidova",
+      "role": "admin"
+    },
+    {
+      "id": 2,
+      "username": "user1",
+      "password": "qwerty",
+      "fullName": "Eshmat Toshmatov",
+      "role": "user"
+    }
+  ]
+}
