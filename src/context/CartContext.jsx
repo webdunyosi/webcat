@@ -4,6 +4,7 @@ const CartContext = createContext()
 
 export const CartProvider = ({ children }) => {
   const [cartItems, setCartItems] = useState([])
+  const [orders, setOrders] = useState([])       // YANGI
 
   const addToCart = (product) => {
     setCartItems((prev) => {
@@ -12,7 +13,7 @@ export const CartProvider = ({ children }) => {
         return prev.map((item) =>
           item.id === product.id
             ? { ...item, quantity: item.quantity + 1 }
-            : item,
+            : item
         )
       }
       return [...prev, { ...product, quantity: 1 }]
@@ -28,12 +29,37 @@ export const CartProvider = ({ children }) => {
       prev.map((item) =>
         item.id === id
           ? { ...item, quantity: Math.max(1, item.quantity + amount) }
-          : item,
-      ),
+          : item
+      )
     )
   }
 
-  const clearCart = () => setCartItems([]) // Savatni tozalash
+  const clearCart = () => setCartItems([])
+
+  // ── YANGI FUNKSIYA ──────────────────────────────
+  const addOrder = (customerName) => {
+    if (cartItems.length === 0) return
+
+    const newOrder = {
+      id: `#${Math.floor(1000 + Math.random() * 9000)}`,
+      date: new Date().toLocaleDateString("uz-UZ", {
+        day: "2-digit", month: "2-digit", year: "numeric",
+      }),
+      status: "Kutilmoqda",
+      statusType: "pending",
+      total: totalPrice.toLocaleString(),
+      totalRaw: totalPrice,
+      customerName,
+      items: cartItems
+        .map((item) => `${item.title} (${item.quantity}x)`)
+        .join(", "),
+      products: [...cartItems],
+    }
+
+    setOrders((prev) => [newOrder, ...prev])
+    clearCart()
+  }
+  // ────────────────────────────────────────────────
 
   const totalPrice = cartItems.reduce((acc, item) => {
     const price = Number(item.price) || 0
@@ -47,8 +73,10 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
-        totalPrice,
         clearCart,
+        addOrder,     // YANGI
+        orders,       // YANGI
+        totalPrice,
       }}
     >
       {children}
