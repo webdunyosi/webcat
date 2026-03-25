@@ -20,6 +20,13 @@
       "password": "asdfgh",
       "fullName": "Sardorbek Yuldashev",
       "role": "user"
+    },
+    {
+      "id": 4,
+      "username": "Ali",
+      "password": "*alimardoncoder001*",
+      "fullName": "Alimardon Toshpulatov",
+      "role": "user"
     }
   ]
 }
