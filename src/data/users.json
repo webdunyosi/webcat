@@ -13,6 +13,13 @@
       "password": "qwerty",
       "fullName": "Eshmat Toshmatov",
       "role": "user"
+    },
+    {
+      "id": 3,
+      "username": "user2",
+      "password": "asdfgh",
+      "fullName": "Sardorbek Yuldashev",
+      "role": "user"
     }
   ]
 }

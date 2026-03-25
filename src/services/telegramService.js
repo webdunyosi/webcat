@@ -7,7 +7,7 @@ const URL = `https://api.telegram.org/bot${TOKEN}/sendMessage`
 export const sendOrderToTelegram = async (
   cartItems,
   totalPrice,
-  customerName = "Dilnoza Rashidova",
+  customerName, // Default qiymatni olib tashladik
 ) => {
   let message = `<b>🛍 Yangi Buyurtma!</b>\n\n`
   message += `<b>👤 Mijoz:</b> ${customerName}\n`
