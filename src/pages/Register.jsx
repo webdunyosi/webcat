@@ -1,6 +1,14 @@
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom"
-import { FaEye, FaEyeSlash, FaCat } from "react-icons/fa"
+import {
+  FaEye,
+  FaEyeSlash,
+  FaCat,
+  FaPaw,
+  FaUser,
+  FaPhone,
+  FaEnvelope,
+} from "react-icons/fa"
 import { sendRegisterToTelegram } from "../services/telegramService"
 import { toast } from "react-hot-toast"
 
@@ -9,7 +17,6 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false)
   const [loading, setLoading] = useState(false)
 
-  // Ma'lumotlarni saqlash uchun state
   const [formData, setFormData] = useState({
     nomi: "",
     username: "",
@@ -26,24 +33,19 @@ const Register = () => {
   const handleSubmit = async (e) => {
     e.preventDefault()
 
-    // Parollarni solishtirish
     if (formData.parol !== formData.reparol) {
-      toast.error("Parollar mos kelmadi!")
+      toast.error("Parollar mos kelmadi! ❌")
       return
     }
 
     setLoading(true)
-    const loadId = toast.loading("Ro'yxatdan o'tilmoqda...")
+    const loadId = toast.loading("Ma'lumotlar yuborilmoqda...")
 
     try {
-      // Botga yuborish
       await sendRegisterToTelegram(formData)
-      toast.success("Muvaffaqiyatli ro'yxatdan o'tdingiz! 🎉", { id: loadId })
-
-      // 2 soniyadan keyin login sahifasiga o'tish
+      toast.success(`Tabriklaymiz, ${formData.nomi}! 🎉`, { id: loadId })
       setTimeout(() => navigate("/login"), 2000)
     } catch (error) {
-      console.error(error)
       toast.error("Xatolik yuz berdi. Qayta urinib ko'ring.", { id: loadId })
     } finally {
       setLoading(false)
@@ -51,153 +53,179 @@ const Register = () => {
   }
 
   return (
-    <div className="bg-linear-90 from-purple-400 to-pink-300 min-h-screen flex items-center justify-center p-4">
-      <div className="w-full md:w-1/2 lg:w-1/3 bg-white m-5 p-8 rounded-[32px] shadow-2xl">
-        <div className="flex flex-col items-center mb-6">
-          <FaCat className="text-5xl text-purple-600 mb-2" />
-          <h2 className="text-4xl text-center font-bold mb-1">Web Cat</h2>
-          <p className="text-center text-gray-500 italic">Ro'yxatdan o'tish</p>
-        </div>
+    <div className="bg-gradient-to-br from-purple-600 via-purple-500 to-pink-400 min-h-screen flex items-center justify-center p-6">
+      <div className="w-full max-w-xl bg-white p-8 md:p-12 rounded-[40px] shadow-2xl relative overflow-hidden">
+        {/* Dekorativ Panja Izi */}
+        <FaPaw className="absolute -top-6 -right-6 text-purple-50 text-[150px] rotate-12 pointer-events-none" />
 
-        <form onSubmit={handleSubmit} className="space-y-3">
-          {/* To'liq ism */}
-          <div>
-            <label
-              className="text-sm font-semibold text-gray-600 ml-1"
-              htmlFor="nomi"
-            >
-              To'liq ism
-            </label>
-            <input
-              className="px-5 py-2.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
-              type="text"
-              id="nomi"
-              placeholder="Ism Familiya"
-              onChange={handleChange}
-              required
-            />
+        <div className="relative z-10">
+          <div className="flex flex-col items-center mb-8">
+            <div className="w-16 h-16 bg-purple-100 rounded-2xl flex items-center justify-center text-purple-600 mb-4 shadow-inner rotate-3">
+              <FaCat size={35} />
+            </div>
+            <h2 className="text-3xl font-black text-gray-800 tracking-tight">
+              Web Cat
+            </h2>
+            <p className="text-gray-400 font-bold uppercase text-[10px] tracking-[4px] mt-1">
+              Yangi akkaunt ochish
+            </p>
           </div>
 
-          <div className="grid grid-cols-2 gap-3">
-            {/* Username */}
-            <div>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Ism va Familiya */}
+            <div className="relative group">
               <label
-                className="text-sm font-semibold text-gray-600 ml-1"
-                htmlFor="username"
+                className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1"
+                htmlFor="nomi"
               >
-                Username
+                To'liq ism
               </label>
               <input
-                className="px-5 py-2.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
+                className="px-5 py-3.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl transition-all shadow-sm focus:shadow-purple-100"
                 type="text"
-                id="username"
-                placeholder="Username"
+                id="nomi"
+                placeholder="Dilnoza Rashidova"
                 onChange={handleChange}
                 required
               />
             </div>
-            {/* Phone */}
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {/* Username */}
+              <div>
+                <label
+                  className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1"
+                  htmlFor="username"
+                >
+                  Username
+                </label>
+                <input
+                  className="px-5 py-3.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl transition-all shadow-sm"
+                  type="text"
+                  id="username"
+                  placeholder="dilnoza_dev"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              {/* Phone */}
+              <div>
+                <label
+                  className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1"
+                  htmlFor="phone"
+                >
+                  Telefon
+                </label>
+                <input
+                  className="px-5 py-3.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
+                  type="tel"
+                  id="phone"
+                  placeholder="+998 90..."
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
+
+            {/* Email */}
             <div>
               <label
-                className="text-sm font-semibold text-gray-600 ml-1"
-                htmlFor="phone"
+                className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1"
+                htmlFor="email"
               >
-                Telefon
+                Email
               </label>
               <input
-                className="px-5 py-2.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
-                type="tel"
-                id="phone"
-                placeholder="+998..."
+                className="px-5 py-3.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
+                type="email"
+                id="email"
+                placeholder="example@gmail.com"
                 onChange={handleChange}
                 required
               />
             </div>
-          </div>
 
-          {/* Email */}
-          <div>
-            <label
-              className="text-sm font-semibold text-gray-600 ml-1"
-              htmlFor="email"
-            >
-              Email
-            </label>
-            <input
-              className="px-5 py-2.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
-              type="email"
-              id="email"
-              placeholder="example@mail.com"
-              onChange={handleChange}
-              required
-            />
-          </div>
+            {/* Parollar qatori */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="relative">
+                <label
+                  className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1"
+                  htmlFor="parol"
+                >
+                  Parol
+                </label>
+                <input
+                  className="px-5 py-3.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
+                  type={showPassword ? "text" : "password"}
+                  id="parol"
+                  placeholder="••••••••"
+                  onChange={handleChange}
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 bottom-3.5 text-gray-300 hover:text-purple-600 cursor-pointer"
+                >
+                  {showPassword ? (
+                    <FaEyeSlash size={18} />
+                  ) : (
+                    <FaEye size={18} />
+                  )}
+                </button>
+              </div>
+              <div className="relative">
+                <label
+                  className="text-[11px] font-bold text-gray-400 uppercase tracking-widest ml-1"
+                  htmlFor="reparol"
+                >
+                  Tasdiqlash
+                </label>
+                <input
+                  className="px-5 py-3.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
+                  type="password"
+                  id="reparol"
+                  placeholder="••••••••"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+            </div>
 
-          {/* Parol */}
-          <div className="relative">
-            <label
-              className="text-sm font-semibold text-gray-600 ml-1"
-              htmlFor="parol"
-            >
-              Parol
-            </label>
-            <input
-              className="px-5 py-2.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
-              type={showPassword ? "text" : "password"}
-              id="parol"
-              placeholder="Parol"
-              onChange={handleChange}
-              required
-            />
+            {/* Ro'yxatdan o'tish tugmasi (Premium Style) */}
             <button
-              type="button"
-              onClick={() => setShowPassword(!showPassword)}
-              className="absolute right-4 bottom-3 text-gray-400 hover:text-purple-600 cursor-pointer"
+              disabled={loading}
+              className={`
+                group relative w-full py-4 mt-6 rounded-2xl font-black text-white 
+                shadow-xl transition-all duration-300 active:scale-95 overflow-hidden cursor-pointer
+                ${
+                  loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-gradient-to-r from-purple-600 to-purple-500 shadow-purple-200 hover:shadow-purple-300 hover:-translate-y-1"
+                }
+              `}
+              type="submit"
             >
-              {showPassword ? <FaEyeSlash size={20} /> : <FaEye size={20} />}
+              <span className="relative z-10 flex items-center justify-center gap-2 tracking-wide">
+                {loading ? "Yuborilmoqda..." : "Ro'yxatdan o'tish"}
+                {!loading && (
+                  <FaPaw className="group-hover:rotate-12 transition-transform" />
+                )}
+              </span>
+              <div className="absolute inset-0 bg-purple-700 translate-y-full group-hover:translate-y-0 transition-transform duration-300"></div>
             </button>
-          </div>
 
-          {/* Parolni tasdiqlash */}
-          <div>
-            <label
-              className="text-sm font-semibold text-gray-600 ml-1"
-              htmlFor="reparol"
-            >
-              Tasdiqlash
-            </label>
-            <input
-              className="px-5 py-2.5 mt-1 border-2 outline-none border-gray-100 focus:border-purple-500 w-full rounded-2xl shadow-sm transition-all"
-              type="password"
-              id="reparol"
-              placeholder="Parolni qayta kiriting"
-              onChange={handleChange}
-              required
-            />
-          </div>
-
-          <button
-            disabled={loading}
-            className={`w-full py-3.5 mt-4 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-95 ${
-              loading
-                ? "bg-gray-400 cursor-not-allowed"
-                : "bg-purple-500 hover:bg-purple-600 shadow-purple-200"
-            }`}
-            type="submit"
-          >
-            {loading ? "Yuborilmoqda..." : "Ro'yxatdan o'tish"}
-          </button>
-
-          <p className="text-center text-gray-500 pt-2">
-            Akkauntingiz bormi?{" "}
-            <Link
-              className="text-purple-600 font-bold hover:underline"
-              to="/login"
-            >
-              Kirish
-            </Link>
-          </p>
-        </form>
+            <p className="text-center text-gray-400 font-medium pt-4 text-sm">
+              Akkauntingiz bormi?{" "}
+              <Link
+                className="text-purple-600 font-black hover:text-purple-800 transition-colors ml-1"
+                to="/login"
+              >
+                Kirish
+              </Link>
+            </p>
+          </form>
+        </div>
       </div>
     </div>
   )

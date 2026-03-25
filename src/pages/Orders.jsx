@@ -1,21 +1,46 @@
 import React, { useState } from "react"
 import { useCart } from "../context/CartContext"
 import {
-  FaBoxOpen, FaClock, FaCheckCircle,
-  FaTruck, FaChevronDown, FaChevronUp, FaShoppingBag,
+  FaBoxOpen,
+  FaClock,
+  FaCheckCircle,
+  FaTruck,
+  FaChevronDown,
+  FaChevronUp,
+  FaShoppingBag,
 } from "react-icons/fa"
 import { useNavigate } from "react-router-dom"
 
 const getStatusStyles = (type) => {
   switch (type) {
     case "completed":
-      return { color: "text-green-600", bg: "bg-green-100", dot: "bg-green-500", icon: <FaCheckCircle /> }
+      return {
+        color: "text-green-600",
+        bg: "bg-green-100",
+        dot: "bg-green-500",
+        icon: <FaCheckCircle />,
+      }
     case "shipping":
-      return { color: "text-blue-600",  bg: "bg-blue-100",  dot: "bg-blue-500",  icon: <FaTruck /> }
+      return {
+        color: "text-blue-600",
+        bg: "bg-blue-100",
+        dot: "bg-blue-500",
+        icon: <FaTruck />,
+      }
     case "pending":
-      return { color: "text-amber-600", bg: "bg-amber-100", dot: "bg-amber-400", icon: <FaClock /> }
+      return {
+        color: "text-amber-600",
+        bg: "bg-amber-100",
+        dot: "bg-amber-400",
+        icon: <FaClock />,
+      }
     default:
-      return { color: "text-gray-600",  bg: "bg-gray-100",  dot: "bg-gray-400",  icon: <FaBoxOpen /> }
+      return {
+        color: "text-gray-600",
+        bg: "bg-gray-100",
+        dot: "bg-gray-400",
+        icon: <FaBoxOpen />,
+      }
   }
 }
 
@@ -25,7 +50,6 @@ const OrderCard = ({ order }) => {
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-all duration-300">
-
       {/* Asosiy qator */}
       <div
         className="p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 cursor-pointer"
@@ -51,8 +75,12 @@ const OrderCard = ({ order }) => {
 
         <div className="flex items-center gap-4 md:gap-6">
           <div className="text-right">
-            <p className="text-lg font-bold text-gray-900">{order.total} so'm</p>
-            <span className={`text-xs font-semibold px-3 py-1 rounded-full ${style.bg} ${style.color}`}>
+            <p className="text-lg font-bold text-gray-900">
+              {order.total} so'm
+            </p>
+            <span
+              className={`text-xs font-semibold px-3 py-1 rounded-full ${style.bg} ${style.color}`}
+            >
               {order.status}
             </span>
           </div>
@@ -70,7 +98,10 @@ const OrderCard = ({ order }) => {
           </p>
           <div className="space-y-2">
             {order.products.map((product) => (
-              <div key={product.id} className="flex items-center justify-between text-sm">
+              <div
+                key={product.id}
+                className="flex items-center justify-between text-sm"
+              >
                 <div className="flex items-center gap-3">
                   {product.image && (
                     <img
@@ -82,7 +113,8 @@ const OrderCard = ({ order }) => {
                   <div>
                     <p className="font-medium text-gray-700">{product.title}</p>
                     <p className="text-xs text-gray-400">
-                      {product.quantity} x {Number(product.price).toLocaleString()} so'm
+                      {product.quantity} x{" "}
+                      {Number(product.price).toLocaleString()} so'm
                     </p>
                   </div>
                 </div>
@@ -93,7 +125,9 @@ const OrderCard = ({ order }) => {
             ))}
           </div>
           <div className="mt-4 pt-3 border-t border-gray-200 flex justify-end">
-            <p className="text-sm font-bold text-[#9333EA]">Jami: {order.total} so'm</p>
+            <p className="text-sm font-bold text-[#9333EA]">
+              Jami: {order.total} so'm
+            </p>
           </div>
         </div>
       )}
@@ -111,7 +145,9 @@ const Orders = () => {
         <div>
           <h1 className="text-3xl font-bold text-[#9333EA]">Buyurtmalarim</h1>
           <p className="text-gray-400 text-sm mt-1">
-            {orders.length > 0 ? `${orders.length} ta buyurtma` : "Hali buyurtma yo'q"}
+            {orders.length > 0
+              ? `${orders.length} ta buyurtma`
+              : "Hali buyurtma yo'q"}
           </p>
         </div>
         {orders.length > 0 && (
@@ -130,15 +166,18 @@ const Orders = () => {
       ) : (
         <div className="text-center py-24 bg-gray-50 rounded-3xl border-2 border-dashed border-gray-200">
           <FaBoxOpen className="text-6xl text-gray-200 mx-auto mb-5" />
-          <h2 className="text-xl font-bold text-gray-400 mb-2">Buyurtmalar yo'q</h2>
+          <h2 className="text-xl font-bold text-gray-400 mb-2">
+            Buyurtmalar yo'q
+          </h2>
           <p className="text-gray-400 text-sm mb-6">
             Mahsulot sotib oling va buyurtmangiz shu yerda ko'rinadi
           </p>
           <button
-            onClick={() => navigate("/products")}
-            className="inline-flex items-center gap-2 bg-[#9333EA] text-white px-6 py-3 rounded-full font-semibold hover:bg-purple-700 transition-colors"
+            onClick={() => navigate("/")}
+            className="group inline-flex items-center gap-3 bg-linear-to-r from-[#9333EA] to-[#A855F7] text-white px-10 py-4 rounded-full font-bold shadow-xl shadow-purple-100 cursor-pointer transition-all duration-300 ease-out hover:scale-105 hover:shadow-2xl hover:shadow-purple-200 hover:-translate-y-1 active:scale-95 active:shadow-inner active:translate-y-0"
           >
-            <FaShoppingBag /> Xarid qilish
+            <FaShoppingBag className="text-xl group-hover:animate-bounce" />
+            <span>Xaridni boshlash</span>
           </button>
         </div>
       )}
