@@ -4,7 +4,7 @@ import { Link, useLocation } from "react-router-dom"
 const AdminSidebar = () => {
   const location = useLocation()
   
-  // Aktiv linkni aniqlash uchun funksiya
+  // Aktiv linkni aniqlash (Dashboard uchun ham, boshqa sahifalar uchun ham)
   const isActive = (path) => location.pathname === path
 
   const menuItems = [
@@ -46,20 +46,29 @@ const AdminSidebar = () => {
                   : "text-gray-400 hover:bg-white/5 hover:text-white"
               }`}
             >
+              {/* Ikonka animatsiyasi */}
               <span className={`text-xl transition-transform duration-300 ${isActive(item.path) ? "scale-110" : "group-hover:scale-110"}`}>
                 {item.icon}
               </span>
+
+              {/* Matn stili */}
               <span className="font-bold text-sm tracking-wide">
                 {item.name}
               </span>
 
-              {/* Aktiv bo'lganda yonida kichik indikator */}
+              {/* Aktiv bo'lganda yonida neon effektli nuqta */}
               {isActive(item.path) && (
-                <div className="ml-auto w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)]"></div>
+                <div className="ml-auto w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_8px_rgba(255,255,255,0.8)] animate-pulse"></div>
               )}
             </Link>
           ))}
         </nav>
+
+        {/* Sidebar pastida kichik dekorativ element (ixtiyoriy) */}
+        <div className="mt-auto pb-4 opacity-20 group text-center">
+           <div className="h-[1px] w-full bg-gradient-to-r from-transparent via-white to-transparent mb-4"></div>
+           <p className="text-[10px] text-white font-bold tracking-[4px] uppercase">Admin</p>
+        </div>
 
       </aside>
     </div>
