@@ -1,0 +1,15 @@
+{
+  "stats": [
+    { "id": 1, "title": "Mahsulotlar", "value": "156 ta", "percent": "+12%", "type": "products" },
+    { "id": 2, "title": "Mijozlar", "value": "1,240 ta", "percent": "+8%", "type": "users" },
+    { "id": 3, "title": "Buyurtmalar", "value": "542 ta", "percent": "+20%", "type": "orders" },
+    { "id": 4, "title": "Daromad", "value": "18.4M", "percent": "+15%", "type": "revenue" }
+  ],
+  "newUsers": [
+    { "name": "Asaloy Ahmedova", "email": "asal@mail.uz", "color": "bg-pink-100 text-pink-600" },
+    { "name": "Bekzod Rahmonov", "email": "bek@mail.uz", "color": "bg-blue-100 text-blue-600" },
+    { "name": "Sardor Komilov", "email": "sara@mail.uz", "color": "bg-orange-100 text-orange-600" },
+    { "name": "Guli Ergasheva", "email": "guli@mail.uz", "color": "bg-emerald-100 text-emerald-600" }
+  ],
+  "chartData": [35, 60, 45, 85, 55, 75, 95]
+}
