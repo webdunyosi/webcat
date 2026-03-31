@@ -70,7 +70,7 @@ const Products = () => {
   })
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-8">
+    <div className="max-w-7xl mx-auto px-0 sm:px-4 py-8">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
         <h1 className="text-3xl font-bold text-[#9333EA]">Mahsulotlar</h1>
 
@@ -92,14 +92,14 @@ const Products = () => {
           <button
             key={cat.id}
             onClick={() => setActiveCategory(cat.id)}
-            className={`flex items-center gap-3 px-6 py-3 rounded-2xl border-2 transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
+            className={`flex items-center grow gap-3 px-6 py-3 rounded-2xl border-2 transition-all cursor-pointer whitespace-nowrap active:scale-95 ${
               activeCategory === cat.id
                 ? "bg-[#9333EA] text-white border-[#9333EA] shadow-lg shadow-purple-200"
                 : "bg-white text-gray-500 border-gray-100 hover:border-purple-200 hover:text-purple-600"
             }`}
           >
-            <span className="text-xl">{cat.icon}</span>
-            <span className="font-semibold tracking-wide">{cat.name}</span>
+            <span className="text-xl mx-auto sm:mx-0">{cat.icon}</span>
+            <span className="font-semibold tracking-wide hidden sm:inline">{cat.name}</span>
           </button>
         ))}
       </div>

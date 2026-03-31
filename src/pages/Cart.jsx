@@ -1,33 +1,23 @@
 import { useCart } from "../context/CartContext"
-import { useAuth } from "../context/AuthContext" // ← 1. AuthContext import qilindi
-import { FaTrash, FaPlus, FaMinus, FaCat } from "react-icons/fa"
+import { useAuth } from "../context/AuthContext"
+import { FaTrash, FaPlus, FaMinus, FaCat, FaShoppingCart, FaChevronRight } from "react-icons/fa"
 import { sendOrderToTelegram } from "../services/telegramService"
 import { useState } from "react"
 import { toast } from "react-hot-toast"
-import { useNavigate } from "react-router-dom" // Yo'naltirish uchun
+import { useNavigate } from "react-router-dom"
 
 const Cart = () => {
-  const {
-    cartItems,
-    removeFromCart,
-    updateQuantity,
-    totalPrice,
-    clearCart,
-    addOrder,
-  } = useCart()
-
-  const { user } = useAuth() // ← 2. Tizimga kirgan foydalanuvchini olamiz
+  const { cartItems, removeFromCart, updateQuantity, totalPrice, clearCart, addOrder } = useCart()
+  const { user } = useAuth()
   const navigate = useNavigate()
   const [loading, setLoading] = useState(false)
 
   const handleOrder = async () => {
-    // 3. Xavfsizlik tekshiruvi: Login qilmagan bo'lsa buyurtma berolmaydi
     if (!user) {
       toast.error("Buyurtma berish uchun avval tizimga kiring!")
       navigate("/login")
       return
     }
-
     if (cartItems.length === 0) {
       toast.error("Savatchangiz bo'sh!")
       return
@@ -35,108 +25,124 @@ const Cart = () => {
 
     setLoading(true)
     const loadId = toast.loading("Buyurtma yuborilmoqda...")
-
     try {
-      // 4. "Dilnoza Rashidova" o'rniga user.name yuboramiz
       await sendOrderToTelegram(cartItems, totalPrice, user.name)
-
-      // Lokal store'ga buyurtmani qo'shish (user.name bilan)
       addOrder(user.name)
-
-      toast.success(`Buyurtmangiz qabul qilindi! Rahmat, ${user.name} 🐈‍⬛`, {
-        id: loadId,
-      })
-      clearCart() // Buyurtmadan keyin savatni tozalash tavsiya etiladi
+      toast.success(`Rahmat, ${user.name}! Buyurtma qabul qilindi 🐈‍⬛`, { id: loadId })
+      clearCart()
     } catch (error) {
-      console.error(error)
-      toast.error("Xatolik yuz berdi, qaytadan urunib ko'ring.", { id: loadId })
+      toast.error("Xatolik yuz berdi.", { id: loadId })
     } finally {
       setLoading(false)
     }
   }
 
   return (
-    <div className="max-w-4xl mx-auto p-4 py-8">
-      <div className="flex items-center gap-3 mb-8">
-        <FaCat className="text-4xl text-[#9333EA]" />
-        <h1 className="text-3xl font-bold text-[#9333EA]">Savatcha</h1>
+    <div className="max-w-7xl mx-auto p-4 md:p-8 font-sans">
+      {/* Sarlavha */}
+      <div className="flex items-center gap-4 mb-8">
+        <div className="w-12 h-12 bg-[#9333EA] rounded-2xl flex items-center justify-center text-white shadow-lg">
+          <FaShoppingCart size={20} />
+        </div>
+        <h1 className="text-3xl font-black text-gray-800 tracking-tight">Savatcha</h1>
       </div>
 
-      <div className="bg-white p-6 rounded-[32px] shadow-sm border border-gray-100">
-        {cartItems.length === 0 ? (
-          <div className="text-center py-16 text-gray-400 italic text-lg">
-            Savatingiz hozircha bo'sh... 🛒
-          </div>
-        ) : (
-          <div className="space-y-6">
-            {cartItems.map((item) => (
-              <div
-                key={item.id}
-                className="flex items-center gap-4 border-b border-gray-50 pb-6 last:border-0"
-              >
-                <img
-                  src={item.image}
-                  className="w-20 h-20 object-contain rounded-xl bg-gray-50 p-2"
-                  alt=""
-                />
-                <div className="flex-grow">
-                  <h3 className="font-bold text-gray-800">{item.title}</h3>
-                  <p className="text-[#9333EA] font-semibold">
-                    {item.price.toLocaleString()} so'm
-                  </p>
-                </div>
-                <div className="flex items-center gap-4">
-                  <div className="flex items-center gap-2 bg-gray-50 px-3 py-1 rounded-lg">
-                    <button
-                      onClick={() => updateQuantity(item.id, -1)}
-                      className="cursor-pointer text-gray-400 hover:text-purple-600 outline-none"
-                    >
-                      <FaMinus size={10} />
-                    </button>
-                    <span className="font-bold w-6 text-center">
-                      {item.quantity}
-                    </span>
-                    <button
-                      onClick={() => updateQuantity(item.id, 1)}
-                      className="text-[#9333EA] cursor-pointer hover:text-purple-800 outline-none"
-                    >
-                      <FaPlus size={10} />
-                    </button>
+      {cartItems.length === 0 ? (
+        <div className="bg-white rounded-[40px] border border-gray-100 p-20 text-center">
+          <FaCat size={80} className="mx-auto mb-6 opacity-10 text-purple-600" />
+          <p className="text-gray-400 font-bold text-xl">Savatchangiz hozircha bo'sh...</p>
+          <button onClick={() => navigate("/")} className="mt-6 text-[#9333EA] font-black uppercase text-sm border-b-2 border-purple-200 hover:border-purple-600 transition-all cursor-pointer">Do'konga qaytish</button>
+        </div>
+      ) : (
+        /* ASOSIY GRID: Kompyuterda 3 qism mahsulot, 1 qism checkout */
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+          
+          {/* CHAP TOMON: MAHSULOTLAR LISTI */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="bg-white rounded-[35px] border border-gray-100 p-4 md:p-8 shadow-sm">
+              {cartItems.map((item) => (
+                <div key={item.id} className="flex items-center gap-4 md:gap-6 border-b border-gray-50 py-6 last:border-0 group">
+                  <div className="w-20 h-20 md:w-24 md:h-24 bg-gray-50 rounded-2xl p-2 flex items-center justify-center group-hover:bg-purple-50 transition-colors">
+                    <img src={item.image} className="max-w-full max-h-full object-contain" alt="" />
                   </div>
-                  <button
-                    onClick={() => removeFromCart(item.id)}
-                    className="text-red-400 cursor-pointer hover:text-red-600"
-                  >
-                    <FaTrash size={16} />
-                  </button>
+                  <div className="flex-grow min-w-0">
+                    <h3 className="font-black text-gray-800 text-sm md:text-lg truncate">{item.title}</h3>
+                    <p className="text-[#9333EA] font-black text-xs md:text-base mt-1">{item.price.toLocaleString()} so'm</p>
+                    
+                    {/* Mobilda sonini boshqarish */}
+                    <div className="flex sm:hidden items-center gap-3 mt-3">
+                      <div className="flex items-center gap-4 bg-gray-100 px-3 py-1 rounded-xl">
+                        <button onClick={() => updateQuantity(item.id, -1)}><FaMinus size={8} /></button>
+                        <span className="font-black text-xs">{item.quantity}</span>
+                        <button onClick={() => updateQuantity(item.id, 1)} className="text-purple-600"><FaPlus size={8} /></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Desktopda soni va o'chirish */}
+                  <div className="hidden sm:flex items-center gap-6">
+                    <div className="flex items-center gap-4 bg-gray-50 px-4 py-2 rounded-xl border border-gray-100">
+                      <button onClick={() => updateQuantity(item.id, -1)} className="text-gray-400 hover:text-red-500"><FaMinus size={10} /></button>
+                      <span className="font-black w-6 text-center">{item.quantity}</span>
+                      <button onClick={() => updateQuantity(item.id, 1)} className="text-purple-600"><FaPlus size={10} /></button>
+                    </div>
+                    <button onClick={() => removeFromCart(item.id)} className="p-3 bg-red-50 text-red-400 rounded-xl hover:bg-red-500 hover:text-white transition-all"><FaTrash size={14} /></button>
+                  </div>
+                  
+                  {/* Mobilda o'chirish tugmasi */}
+                  <button onClick={() => removeFromCart(item.id)} className="sm:hidden p-3 text-red-300"><FaTrash size={14} /></button>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* O'NG TOMON: UMUMIY TO'LOV (Sticky) */}
+          <div className="lg:sticky lg:top-24">
+            <div className="bg-white rounded-[35px] border border-gray-100 p-8 shadow-xl shadow-purple-900/5">
+              <h2 className="text-xl font-black text-gray-800 mb-6 flex items-center gap-2">
+                <FaCat className="text-purple-600" /> Buyurtma xulosasi
+              </h2>
+              
+              <div className="space-y-4 mb-8">
+                <div className="flex justify-between text-gray-400 font-bold text-sm">
+                  <span>Mahsulotlar soni:</span>
+                  <span>{cartItems.reduce((acc, item) => acc + item.quantity, 0)} ta</span>
+                </div>
+                <div className="flex justify-between text-gray-400 font-bold text-sm">
+                  <span>Yetkazib berish:</span>
+                  <span className="text-green-500">Bepul</span>
+                </div>
+                <div className="pt-4 border-t border-gray-50 flex justify-between items-end">
+                  <span className="text-gray-800 font-black uppercase text-xs tracking-widest">Jami:</span>
+                  <div className="text-right">
+                    <h2 className="text-2xl font-black text-[#9333EA] leading-none">{totalPrice.toLocaleString()}</h2>
+                    <span className="text-[10px] font-black text-gray-400 uppercase">so'm</span>
+                  </div>
                 </div>
               </div>
-            ))}
 
-            <div className="pt-8 border-t border-gray-100 flex flex-col md:flex-row justify-between items-center gap-4">
-              <div className="text-center md:text-left">
-                <p className="text-gray-400 text-sm italic font-medium">
-                  Jami to'lov:
-                </p>
-                <h2 className="text-3xl font-extrabold text-gray-800">
-                  {totalPrice.toLocaleString()} so'm
-                </h2>
-              </div>
               <button
                 onClick={handleOrder}
                 disabled={loading}
-                className={`w-full md:w-auto px-12 py-4 rounded-2xl font-bold text-white transition-all shadow-lg active:scale-95 ${
-                  loading
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-[#9333EA] hover:bg-purple-700 shadow-purple-200 cursor-pointer"
+                className={`w-full py-5 rounded-2xl font-black text-white uppercase tracking-widest text-xs transition-all flex items-center justify-center gap-3 active:scale-95 shadow-lg ${
+                  loading ? "bg-gray-300" : "bg-[#9333EA] hover:bg-black shadow-purple-200"
                 }`}
               >
-                {loading ? "Yuborilmoqda..." : "Buyurtma berish"}
+                {loading ? "Yuborilmoqda..." : (
+                  <>
+                    Tasdiqlash <FaChevronRight />
+                  </>
+                )}
               </button>
+
+              <p className="text-[10px] text-center text-gray-400 mt-4 font-medium px-4">
+                "Tasdiqlash" tugmasini bosish orqali xizmat ko'rsatish shartlariga rozilik bildirasiz.
+              </p>
             </div>
           </div>
-        )}
-      </div>
+
+        </div>
+      )}
     </div>
   )
 }
