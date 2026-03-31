@@ -17,7 +17,7 @@ const Sidebar = () => {
 
   return (
     <>
-      {/* DESKTOP SIDEBAR (lg ekrandan boshlab ko'rinadi) */}
+      {/* DESKTOP SIDEBAR (O'zgarishsiz qoldi) */}
       <aside className="hidden lg:flex fixed top-16 left-0 bottom-0 z-20 w-1/5 bg-gradient-to-b from-purple-700 to-blue-600 p-4 flex-col gap-2">
         {menuItems.map((item) => (
           <Link
@@ -40,28 +40,60 @@ const Sidebar = () => {
         ))}
       </aside>
 
-      {/* MOBILE BOTTOM NAVIGATION (faqat mobilda ko'rinadi) */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white border-t border-gray-100 flex justify-around items-center px-2 py-2 shadow-[0_-5px_15px_rgba(0,0,0,0.05)]">
-        {menuItems.map((item) => (
-          <Link
-            key={item.path}
-            to={item.path}
-            className={`flex flex-col items-center gap-1 p-2 rounded-xl transition-all relative ${
-              isActive(item.path) ? "text-purple-600" : "text-gray-400"
-            }`}
-          >
-            <div className={`text-xl ${isActive(item.path) ? "scale-110" : ""}`}>{item.icon}</div>
-            <span className="text-[10px] font-bold uppercase tracking-tighter">{item.label}</span>
-            
-            {/* Mobilda savatdagi son belgisi */}
-            {item.badge > 0 && (
-              <span className="absolute top-1 right-2 bg-red-500 text-white text-[8px] w-4 h-4 flex items-center justify-center rounded-full border border-white">
-                {item.badge}
-              </span>
-            )}
-          </Link>
-        ))}
+      {/* MOBILE LIQUID NAVIGATION (Admin paneldagi uslubda) */}
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-[100] bg-white h-[70px] flex justify-around items-center px-4 rounded-t-[30px] border-t border-gray-100 shadow-[0_-10px_30px_rgba(0,0,0,0.08)]">
+        {menuItems.map((item) => {
+          const active = isActive(item.path);
+          return (
+            <Link
+              key={item.path}
+              to={item.path}
+              className="relative flex flex-col items-center justify-center w-16"
+            >
+              {/* Active Liquid Pop-up */}
+              {active && (
+                <div className="absolute -top-[30px] w-14 h-14 bg-gradient-to-tr from-purple-600 to-blue-500 rounded-full border-[5px] border-white shadow-lg shadow-purple-200 flex items-center justify-center transition-all duration-500 animate-pop">
+                   <span className="text-white text-xl">{item.icon}</span>
+                   {item.badge > 0 && (
+                    <span className="absolute -top-1 -right-1 bg-red-500 text-white text-[9px] font-black w-5 h-5 flex items-center justify-center rounded-full border-2 border-white">
+                      {item.badge}
+                    </span>
+                   )}
+                </div>
+              )}
+
+              {/* Inactive Icon & Label */}
+              <div className={`transition-all duration-500 flex flex-col items-center ${active ? "translate-y-4 opacity-0" : "translate-y-0 opacity-100"}`}>
+                <div className="text-xl text-gray-400">{item.icon}</div>
+                <span className="text-[9px] font-black uppercase tracking-tighter text-gray-400 mt-1">{item.label}</span>
+                
+                {/* Badge for inactive state */}
+                {!active && item.badge > 0 && (
+                  <span className="absolute -top-1 right-2 bg-red-500 text-white text-[8px] w-4 h-4 flex items-center justify-center rounded-full border border-white">
+                    {item.badge}
+                  </span>
+                )}
+              </div>
+
+              {/* Indicator Dot */}
+              {active && (
+                <div className="absolute bottom-1 w-1.5 h-1.5 bg-purple-600 rounded-full shadow-[0_0_8px_rgba(147,51,234,1)]"></div>
+              )}
+            </Link>
+          );
+        })}
       </nav>
+
+      {/* Animatsiya uchun CSS */}
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes pop {
+          0% { transform: scale(0.5) translateY(20px); opacity: 0; }
+          100% { transform: scale(1) translateY(0); opacity: 1; }
+        }
+        .animate-pop {
+          animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+      `}} />
     </>
   )
 }
